@@ -5,6 +5,17 @@ pipeline {
         cron('0 14 * * *')  // Runs daily at 2:00 PM
     }
 
+    environment {
+        // Update path as needed
+        JAVA_HOME = 'C:\\Program Files\\Java\\jdk-21'
+        PATH = "${JAVA_HOME}\\bin;${env.PATH}"
+    }
+
+    tools {
+        nodejs 'NodeJS_18'       // Define this tool in Jenkins > Global Tool Configuration
+        allure 'Allure_2.21.0'   // Define this in Jenkins > Global Tool Configuration
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -16,29 +27,40 @@ pipeline {
             steps {
                 // Use pip to install requirements
                 bat 'pip install -r requirements.txt'
+                bat 'npm install -g allure-commandline --force'
             }
         }
         stage('Install Playwright browsers') {
             steps {
                 // Run playwright install
-                bat 'python -m playwright install'
+                bat 'playwright install'
             }
         }
+
         stage('Run Tests') {
             steps {
                 // Run pytest
-                bat 'pytest -v'
+                bat 'pytest --alluredir=allure-results -v'
             }
         }
-    }
+
+        stage('Generate Allure Report') {
+            steps {
+                bat 'allure generate allure-results --clean -o allure-report'
+            }
+        }
+
+        stage('Archive Reports') {
+                steps {
+                    archiveArtifacts artifacts: 'allure-report/**/*', fingerprint: true
+                    archiveArtifacts artifacts: 'trace/**/*.zip', allowEmptyArchive: true
+                }
+            }
+        }
 
     post {
-    always {
-        // Archive the Playwright report
-        archiveArtifacts artifacts: 'report/playwright-report.html', fingerprint: true
-
-        // Archive all files under trace/ folder
-        archiveArtifacts artifacts: 'trace/**', fingerprint: true
+        always {
+            echo 'Pipeline completed.'
         }
     }
 }

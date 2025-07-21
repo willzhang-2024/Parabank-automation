@@ -4,3 +4,5 @@ trace/
 *.json
 browserstack.yml
 report/
+allure-report/
+allure-results/
