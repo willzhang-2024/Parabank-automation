@@ -57,3 +57,7 @@ jobs:
         name: playwright-traces
         path: trace/
         retention-days: 7
+
+    - name: Add Allure Report link to summary
+      run: |
+        echo "### ✅ [Download Allure Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts)" >> $GITHUB_STEP_SUMMARY
