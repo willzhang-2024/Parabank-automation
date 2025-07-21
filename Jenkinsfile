@@ -30,6 +30,19 @@ pipeline {
                 bat 'npm install -g allure-commandline --force'
             }
         }
+
+        stage('Install Allure CLI') {
+            steps {
+                sh '''
+                    # Download latest Allure CLI
+                    wget https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
+                    tar -zxvf allure-2.27.0.tgz
+                    sudo mv allure-2.27.0 /opt/allure
+                    sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+                    allure --version
+                '''
+            }
+        }
         stage('Install Playwright browsers') {
             steps {
                 // Run playwright install
