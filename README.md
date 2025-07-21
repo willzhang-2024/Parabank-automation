@@ -57,3 +57,7 @@ pytest
 ├───api                         #api object directory
 ├───pages                       #page object directory
 ├───test                        #test case directory
+├───report                      #report directory
+├───trace                       #trace directory
+├───.github                     #github action workflow
+├───Jenkinsfile                 #Jenkins pipeline
