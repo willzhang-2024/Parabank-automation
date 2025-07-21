@@ -58,20 +58,3 @@ jobs:
         path: trace/
         retention-days: 7
 
-    - name: Get Allure Report artifact ID
-      id: get_artifact
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            run_id: context.runId
-          });
-          const artifact = artifacts.data.artifacts.find(a => a.name === 'allure-report');
-          if (!artifact) throw new Error('Artifact "allure-report" not found');
-          return artifact.id;
-
-    - name: Add Allure Report link to summary
-      run: |
-        echo "### ✅ [Download Allure Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts/${{ steps.get_artifact.outputs.result }})" >> $GITHUB_STEP_SUMMARY
