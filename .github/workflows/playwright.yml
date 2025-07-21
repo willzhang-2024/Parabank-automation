@@ -58,8 +58,7 @@ jobs:
         path: trace/
         retention-days: 7
 
-    - name: Get Allure Report artifact ID
-      id: get_artifact
+    - name: Get Allure Report artifact
       uses: actions/github-script@v6
       with:
         script: |
