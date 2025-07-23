@@ -38,34 +38,35 @@ pipeline {
             }
         }
 
-        stage('Generate Allure Report') {
+        stage('Run Tests') {
             steps {
-                bat '''
-                    set PATH=%CD%\\allure-%ALLURE_VERSION%\\bin;%PATH%
-                    allure generate allure-results --clean -o allure-report
-                '''
+                // Run tests and collect Allure results even if they fail
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    sh 'pytest --alluredir=allure-results'
+                }
+            }
+        }
+
+        stage('Generate Allure Report') {
+            // Always generate the report, even if test failed
+            steps {
+                // `catchError` here is optional unless allure command might fail
+                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                    sh 'allure generate allure-results --clean -o allure-report'
+                }
             }
         }
 
         stage('Archive Allure Report') {
             steps {
-                allure includeProperties: false, jdk: '', results: [[path: 'allure-results']]
-            }
-        }
-
-        stage('Archive Playwright Traces') {
-            when {
-                expression { fileExists('trace') }
-            }
-            steps {
-                archiveArtifacts artifacts: 'trace/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
             }
         }
     }
 
     post {
         always {
-            echo "Pipeline finished. Allure and trace artifacts are archived."
+            echo 'Pipeline finished. Allure report generation attempted.'
         }
     }
 }
