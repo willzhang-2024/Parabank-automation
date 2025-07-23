@@ -1,8 +1,6 @@
 __pycache__/
 trace/
 .idea/
-*.json
 browserstack.yml
 report/
-allure-report/
 allure-results/

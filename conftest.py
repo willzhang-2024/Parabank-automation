@@ -1,22 +1,19 @@
 import json
 import logging
 import os
-from datetime import datetime
-
-import playwright
+from utils import load_json_file_info
 import pytest
 from playwright.async_api import async_playwright
 from playwright.sync_api import expect, Playwright, sync_playwright
 from dotenv import load_dotenv
 from pathlib import Path
+
 # Load environment variables from .env file
 load_dotenv()
 
-from utils import load_json_file_info
-
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 BASE_URL = os.getenv('BASE_URL')
-STORAGE_PATH = "member_storage.json"
+STORAGE_PATH = os.path.join(os.path.dirname(__file__), "member_storage.json")
 
 # Hook to capture test result
 @pytest.hookimpl(hookwrapper=True)
@@ -29,7 +26,7 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture(scope="function", autouse=True)
 def member_storage(context):
     """Ensure valid member_storage.json exists"""
-    member_info = load_json_file_info("member_info.json")
+    member_info = load_json_file_info("data/member_info.json")
     page = context.new_page()
     page.goto(f"{BASE_URL}/overview.htm")
     if page.locator('//h1[contains(text(), "Accounts Overview")]').is_visible():
@@ -112,14 +109,5 @@ def page(context):
     yield page
     page.close()
 
-# def pytest_configure(config):
-#     report_dir = os.path.join(os.getcwd(), 'report')
-#     report_file = os.path.join(report_dir, "report.html")
-#
-#     # Ensure the report directory exists
-#     os.makedirs(report_dir, exist_ok=True)
-#
-#     # Add the HTML report path to pytest options
-#     config.option.htmlpath = report_file
 
 
