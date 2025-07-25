@@ -9,10 +9,9 @@ from playwright.async_api import async_playwright
 from playwright.sync_api import expect, Playwright, sync_playwright
 from dotenv import load_dotenv
 from pathlib import Path
+
 # Load environment variables from .env file
 load_dotenv()
-
-
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 BASE_URL = os.getenv('BASE_URL')
@@ -82,10 +81,8 @@ def context(browser, request):
 
     yield context
 
-
-
     # Create trace directory
-    trace_folder = os.path.join(os.getcwd(), 'trace')
+    trace_folder = os.path.join(os.path.dirname(__file__), "trace/")
     os.makedirs(trace_folder, exist_ok=True)
     trace_file = os.path.join(trace_folder, f"trace_{request.node.name}.zip")
 
