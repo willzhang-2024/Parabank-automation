@@ -22,7 +22,7 @@ API automation
 
 **Set up local project**
 ```shell
-$ git clone https://github.com/lifebyte-systems/CRM-UI-Automation.git
+$ git clone https://github.com/willzhang-2024/Parabank-automation.git
 $ cd Parabank-automation
 $ pip install -r requirements.txt
 ```
