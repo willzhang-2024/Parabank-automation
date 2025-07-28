@@ -59,15 +59,10 @@ def api_request_context(playwright: Playwright):
     request_context.dispose()
 
 @pytest.fixture(scope="session")
-async def playwright_instance():
-    async with async_playwright() as playwright:
-        yield playwright
-
-
-@pytest.fixture(scope="session")
 def browser(playwright):
     is_ci = os.getenv("CI", "false").lower() == "true"
-    browser = playwright.chromium.launch(headless=is_ci)
+    browser = playwright.chromium.launch(headless=is_ci,
+                                         args=["--disable-gpu", "--no-sandbox"]  )
     yield browser
     browser.close()
 
