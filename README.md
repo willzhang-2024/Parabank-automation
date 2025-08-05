@@ -23,7 +23,7 @@ This project is designed to automate end-to-end testing for a web application us
 **Set up local project**
 ```shell
 $ git clone https://github.com/willzhang-2024/Parabank-automation.git
-$ cd Parabank-Python
+$ cd Parabank-automation
 $ pip install -r requirements.txt
 ```
 
