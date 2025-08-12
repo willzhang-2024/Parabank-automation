@@ -2,8 +2,8 @@ from pages.base_page import BasePage
 
 
 class AccountOverviewPage(BasePage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, env_config):
+        super().__init__(page, env_config)
 
     def verify_account_balance(self, account_id: str, expected_balance_value: str):
         self.table = self.right_panel.locator('#accountTable')

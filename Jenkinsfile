@@ -10,6 +10,8 @@ pipeline {
         cron('H 14 * * *')  // Runs daily at 2:00 PM
     }
 
+
+
     stages {
         stage('Install Depemdencies') {
             steps {
@@ -31,7 +33,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     bat '''
-                        pytest -v --alluredir=allure-results
+                        pytest -v --env qa
                     '''
                 }
             }

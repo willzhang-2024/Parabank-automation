@@ -8,8 +8,8 @@ load_dotenv()
 BASE_URL = os.getenv("BASE_URL")
 
 class FindTransactionsPage(BasePage):
-    def __init__(self, page):
-        super().__init__(page)
+    def __init__(self, page, env_config):
+        super().__init__(page, env_config)
 
     def find_transaction_by_category(self, category, first_value: str, second_value: str = ''):
         """
