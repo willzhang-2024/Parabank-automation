@@ -1,0 +1,27 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: playwright-tests
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+        - name: playwright-python
+          image: your-dockerhub-user/playwright-python:latest
+          imagePullPolicy: Always
+          env:
+            - name: ENV
+              value: "qa"  # Change this to qa/dev/prod at runtime
+            - name: CI
+              value: "true"
+          command: ["pytest"]
+          args:
+            [
+              "-v",
+              "--env",
+              "$(ENV)",  # Use the env var dynamically
+              "--maxfail=1",
+              "--disable-warnings"
+            ]
+      restartPolicy: Never
